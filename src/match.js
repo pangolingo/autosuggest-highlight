@@ -12,7 +12,7 @@ function escapeRegexCharacters(str) {
   return str.replace(specialCharsRegex, '\\$&');
 }
 
-module.exports = function match(text, query) {
+module.exports = function match(text, query, anyPartOfWord = false) {
   text = removeDiacritics(text);
   query = removeDiacritics(query);
 
@@ -26,7 +26,7 @@ module.exports = function match(text, query) {
       })
       .reduce(function(result, word) {
         var wordLen = word.length;
-        var prefix = wordCharacterRegex.test(word[0]) ? '\\b' : '';
+        var prefix = anyPartOfWord ? '' : (wordCharacterRegex.test(word[0]) ? '\\b' : '');
         var regex = new RegExp(prefix + escapeRegexCharacters(word), 'i');
         var index = text.search(regex);
 
